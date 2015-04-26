@@ -8,7 +8,7 @@
     //    //双击变成可编辑
     //   $(".node").removeAttr("contentEditable");
     //});
-
+    var k=0.5;
     //[标识]当前
     $("*").on("click",".node",function(){
         //任何node-DIV被单击都会变成活动元素:
@@ -23,13 +23,13 @@
     });
     //[正在拖动...]
     $("*").on("mousemove","div",function(){
-        //曲线动画;
-        $("path[id="+$(this).attr("id")+"]").attr("d",flushPath("div[id="+$(this).attr("father")+"]",this,0.6));
         var _this=this;
         $("path[father="+$(this).attr("id")+"]").each(function(){
             console.log($(this));
-            $(this).attr("d",flushPath(_this,"div[id="+$(this).attr("id")+"]",0.6));
+            $(this).attr("d",flushPath(_this,"div[id="+$(this).attr("id")+"]",k));
         });
+        //曲线动画;
+        $("path[id="+$(this).attr("id")+"]").attr("d",flushPath("div[id="+$(this).attr("father")+"]",this,k));
     });
 
 $(document).ready(function(){
@@ -40,7 +40,7 @@ $(document).ready(function(){
         //1:给当前元素添加一个ID为"_id"的<div>;
         $(".active").createNodeObj(++_id);
         //2:为其生成曲线;
-        createCurve(".active","#"+_id,0.6,_id);
+        createCurve(".active","#"+_id,k,_id);
     });
 });
     function createCurve(_filter1,_filter2,_k,_cId){
@@ -55,12 +55,11 @@ $(document).ready(function(){
 		//console.log($(filter1));
 		//console.log($(filter2));
         //起点1：---------------------------------------------------------------//
-        var x0 = $(filter1).position().left + 50;
-        var y0 = $(filter1).position().top + 20;
+        var x0 = $(filter1).position().left + $(filter1).outerWidth()/2;
+        var y0 = $(filter1).position().top + $(filter1).outerHeight()/2;
         //末点4：---------------------------------------------------------------//
-        var x3 = $(filter2).position().left + 50;
-        var y3 = $(filter2).position().top + 20;
-
+        var x3 = $(filter2).position().left + $(filter2).outerHeight()/2;
+        var y3 = $(filter2).position().top + $(filter2).outerWidth()/2;
         //控制点1---------------------------------------------------------------//
         var x1 = x0 + (x3 - x0) * k;
         var y1 = y0;
@@ -68,7 +67,6 @@ $(document).ready(function(){
         var x2 = x3 - (x3 - x0) * k;
         var y2 = y3;
         //---------------------------------------------------------------------//
-
         var _dStr = "M" + x0 + "," + y0 + " C" + x1 + "," + y1 + "," + x2 + "," + y2 + "," + x3 + "," + y3;
         //console.log("path的d参数："+_dStr);
         return _dStr;
@@ -80,6 +78,8 @@ $(document).ready(function(){
         //node的html母体结构修改：
         _nodeStr="<div id='"+_id+"' class='node "+this.attr("id")+"' father='"+this.attr("id")+"'>"+_id+"</div>";
 
+        //节点的添加方式【1.平行after】【2.内部append】
         $(this).after(_nodeStr);
-        //console.log(_nodeStr);
+        //$(this).append(_nodeStr);
+        //内部append方式，定位方式...
     }
