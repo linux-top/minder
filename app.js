@@ -58,8 +58,8 @@ $(document).ready(function(){
         var x0 = $(filter1).position().left + $(filter1).outerWidth()/2;
         var y0 = $(filter1).position().top + $(filter1).outerHeight()/2;
         //末点4：---------------------------------------------------------------//
-        var x3 = $(filter2).position().left + $(filter2).outerHeight()/2;
-        var y3 = $(filter2).position().top + $(filter2).outerWidth()/2;
+        var x3 = $(filter2).position().left + $(filter2).outerWidth()/2;
+        var y3 = $(filter2).position().top + $(filter2).outerHeight()/2;
         //控制点1---------------------------------------------------------------//
         var x1 = x0 + (x3 - x0) * k;
         var y1 = y0;
